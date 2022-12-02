@@ -2,7 +2,7 @@ pipeline {
     options {timestamps()}
      environment {
                 registry = "bralech/jenkins-flask-app"
-                registryCredential = 'bralech'
+                registryCredential = 'bralech-dockerhub'
                 dockerImage = ''
             }
 
