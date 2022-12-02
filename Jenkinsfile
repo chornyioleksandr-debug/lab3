@@ -1,5 +1,12 @@
 pipeline {
     options {timestamps()}
+     environment {
+                registry = "bralech/jenkins-flask-app"
+                registryCredential = 'dockerhub_id'
+                dockerImage = ''
+            }
+
+    
     agent none
     stages {
         stage('Check scm') {
@@ -37,5 +44,21 @@ pipeline {
                 } // post
             } 
         }
+         stage('Image building') {
+                    steps {
+                        script {
+                            dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                        }
+                    }
+                }
+                stage('Deploy') {
+                    steps {
+                        script {
+                            docker.withRegistry( '', registryCredential ) {
+                                dockerImage.push()
+                            }
+                        }
+                    }
+                }
     }
 }
